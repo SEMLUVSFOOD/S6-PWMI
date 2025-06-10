@@ -35,4 +35,11 @@ html, body {
     -ms-filter: fliph; /*IE*/
     filter: fliph; /*IE*/
     height: 100%;    
+    z-index: -10;
+  }
+
+  .buttonTest {
+    position: absolute;
+    margin-bottom: 400px;
+    margin-left: 225px;
   }
