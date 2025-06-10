@@ -4,26 +4,13 @@ html, body {
     background: transparent;
     overflow: hidden;
   }
-  canvas {
-    /* position: absolute; */
-    /* top: 0; */
-    /* left: 0; */
-    height: 100%;
-    -moz-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    transform: scaleX(-1);
-    -ms-filter: fliph; /*IE*/
-    filter: fliph; /*IE*/
-    scale: 0.8 ;
-    border: 5px solid black;
-  }
   video {
     display: none;
   }
 
 
   body{
+    display: flex;
     width: 100vw;
     height: 100vh;
     justify-content: center;
@@ -31,14 +18,21 @@ html, body {
   }
 
   .screenElement {
-    width: 100%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 300px;
+    height: 455px;
+    border: 5px solid black;
+    overflow: hidden;
   }
 
   .screenElement canvas {
-    width: 400px;
-    height: 711px;
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    -ms-filter: fliph; /*IE*/
+    filter: fliph; /*IE*/
+    height: 100%;    
   }
