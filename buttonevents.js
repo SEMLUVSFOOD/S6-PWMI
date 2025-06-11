@@ -1,6 +1,4 @@
-// buttonevent.js
-export function onButtonSelected() {
-    console.log('Button selected!');
-    alert("button SELECTED!!!");
+export function onButtonSelected(label) {
+    console.log(`Button selected: ${label}`);
   }
   

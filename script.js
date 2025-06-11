@@ -1,141 +1,136 @@
 import { onButtonSelected } from './buttonevents.js';
 
 let hoverStart = null;
-let hoverOpacity = 0;
 let selectionMade = false;
 
-  const video = document.getElementById('video');
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 
-  async function setupCamera() {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { width: 640, height: 480 }
-    });
-    video.srcObject = stream;
-    return new Promise(resolve => {
-      video.onloadedmetadata = () => resolve();
-    });
-  }
+async function setupCamera() {
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video: { width: 640, height: 480 }
+  });
+  video.srcObject = stream;
+  return new Promise(resolve => {
+    video.onloadedmetadata = () => resolve();
+  });
+}
 
-  async function start() {
-    await setupCamera();
-    video.play();
+async function start() {
+  await setupCamera();
+  video.play();
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
 
-    const bodyPixNet = await bodyPix.load();
+  const bodyPixNet = await bodyPix.load();
 
-    const hands = new Hands({
-      locateFile: file => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
-    });
+  const hands = new Hands({
+    locateFile: file => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+  });
 
-    hands.setOptions({
-      maxNumHands: 2,
-      modelComplexity: 1,
-      minDetectionConfidence: 0.6,
-      minTrackingConfidence: 0.6
-    });
+  hands.setOptions({
+    maxNumHands: 2,
+    modelComplexity: 1,
+    minDetectionConfidence: 0.6,
+    minTrackingConfidence: 0.6
+  });
 
-    hands.onResults(results => {
-        if (results.multiHandLandmarks) {
-          const canvasRect = canvas.getBoundingClientRect();
-          let anyOverlap = false;
-      
-          for (const landmarks of results.multiHandLandmarks) {
-            const palm = landmarks[9];
-            const x = palm.x * canvas.width;
-            const y = palm.y * canvas.height;
-      
-            const flippedX = (1 - palm.x) * canvas.width;
-            const screenX = canvasRect.left + flippedX * (canvasRect.width / canvas.width);
-            const screenY = canvasRect.top + y * (canvasRect.height / canvas.height);
-      
-            const radius = 45;
-            const button = document.querySelector('.buttonTest');
-            const rect = button.getBoundingClientRect();
-      
-            const isOverlapping =
-              screenX + radius >= rect.left &&
-              screenX - radius <= rect.right &&
-              screenY + radius >= rect.top &&
-              screenY - radius <= rect.bottom;
-      
-            if (isOverlapping) {
-              anyOverlap = true;
-      
-              if (!hoverStart) hoverStart = Date.now();
-      
-              const hoverTime = Date.now() - hoverStart;
-              const overlayOpacity = Math.min(hoverTime / 3000, 1);
-      
-              // Draw overlay glow filling up
-              ctx.beginPath();
-              ctx.arc(x, y, radius, 0, 2 * Math.PI);
-              ctx.fillStyle = `rgba(255, 0, 0, ${overlayOpacity})`;
-              ctx.fill();
-      
-              if (overlayOpacity >= 1 && !selectionMade) {
-                selectionMade = true;
-                onButtonSelected();
-              }
-            }
-      
-            // Always draw faint base circle
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, 2 * Math.PI);
-            ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
-            ctx.fill();
-          }
-      
-          // Reset if no hand over the button
-          if (!anyOverlap) {
-            hoverStart = null;
-            hoverOpacity = 0;
-            selectionMade = false;
+  hands.onResults(results => {
+    if (results.multiHandLandmarks) {
+      const canvasRect = canvas.getBoundingClientRect();
+      let anyOverlap = false;
+
+      for (const landmarks of results.multiHandLandmarks) {
+        const palm = landmarks[9];
+        const x = palm.x * canvas.width;
+        const y = palm.y * canvas.height;
+
+        // Flip x for mirrored canvas
+        const flippedX = (1 - palm.x) * canvas.width;
+        const screenX = canvasRect.left + flippedX * (canvasRect.width / canvas.width);
+        const screenY = canvasRect.top + y * (canvasRect.height / canvas.height);
+
+        const radius = 45;
+        const overlappingButton = getOverlappingButton(screenX, screenY, radius);
+
+        if (overlappingButton) {
+          anyOverlap = true;
+
+          if (!hoverStart) hoverStart = Date.now();
+
+          const hoverTime = Date.now() - hoverStart;
+          const progress = Math.min(hoverTime / 2000, 1);
+
+          const startAngle = -Math.PI / 2;
+          const endAngle = startAngle + 2 * Math.PI * progress;
+
+          // Draw animated arc
+          ctx.beginPath();
+          ctx.arc(x, y, radius + 4, startAngle, endAngle, false);
+          ctx.strokeStyle = 'rgba(255, 0, 0, 1)';
+          ctx.lineWidth = 4;
+          ctx.stroke();
+
+          if (progress >= 1 && !selectionMade) {
+            selectionMade = true;
+            const label = overlappingButton.textContent || overlappingButton.dataset.id;
+            onButtonSelected(label);
           }
         }
-      });      
-    
-    function checkOverlapWithButton(screenX, screenY, radius = 45) {
-        const button = document.querySelector('.buttonTest');
-        const rect = button.getBoundingClientRect();
-      
-        const isOverlapping =
-          screenX + radius >= rect.left &&
-          screenX - radius <= rect.right &&
-          screenY + radius >= rect.top &&
-          screenY - radius <= rect.bottom;
-      
-        if (isOverlapping) {
-          console.log('overlap!');
-        }
-    }    
 
-    async function render() {
-      // Draw silhouette
-      const segmentation = await bodyPixNet.segmentPerson(video, {
-        internalResolution: 'full',
-        segmentationThreshold: 0.6
-      });
+        // Always draw base red circle
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
+        ctx.fill();
+      }
 
-      const mask = bodyPix.toMask(
-        segmentation,
-        { r: 0, g: 0, b: 0, a: 255 },  // Black silhouette
-        { r: 0, g: 0, b: 0, a: 0 }     // Transparent background
-      );
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.putImageData(mask, 0, 0);
-
-      // Run hand detection
-      await hands.send({ image: video });
-
-      requestAnimationFrame(render);
+      if (!anyOverlap) {
+        hoverStart = null;
+        selectionMade = false;
+      }
     }
+  });
 
-    render();
+  // Helper to find the first button being overlapped
+  function getOverlappingButton(screenX, screenY, radius = 45) {
+    const buttons = document.querySelectorAll('.hoverButton');
+    for (const button of buttons) {
+      const rect = button.getBoundingClientRect();
+      const isOverlapping =
+        screenX + radius >= rect.left &&
+        screenX - radius <= rect.right &&
+        screenY + radius >= rect.top &&
+        screenY - radius <= rect.bottom;
+
+      if (isOverlapping) return button;
+    }
+    return null;
   }
 
-  start();
+  async function render() {
+    const segmentation = await bodyPixNet.segmentPerson(video, {
+      internalResolution: 'full',
+      segmentationThreshold: 0.6
+    });
+
+    const mask = bodyPix.toMask(
+      segmentation,
+      { r: 0, g: 0, b: 0, a: 255 },
+      { r: 0, g: 0, b: 0, a: 0 }
+    );
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.putImageData(mask, 0, 0);
+
+    await hands.send({ image: video });
+
+    requestAnimationFrame(render);
+  }
+
+  render();
+}
+
+start();
