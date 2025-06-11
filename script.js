@@ -52,7 +52,7 @@ async function start() {
         const screenX = canvasRect.left + flippedX * (canvasRect.width / canvas.width);
         const screenY = canvasRect.top + y * (canvasRect.height / canvas.height);
 
-        const radius = 45;
+        const radius = 35;
         const overlappingButton = getOverlappingButton(screenX, screenY, radius);
 
         if (overlappingButton) {

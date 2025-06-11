@@ -21,8 +21,8 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 300px;
-    height: 455px;
+    width: 400px;
+    height: 555px;
     border: 5px solid black;
     overflow: hidden;
   }
@@ -40,8 +40,8 @@ html, body {
   }
 
   .languageSelectors {
-    width: 275px;
-    height: 430px;
+    width: 375px;
+    height: 530px;
     position: absolute;
     display: flex;
     align-items: end;
