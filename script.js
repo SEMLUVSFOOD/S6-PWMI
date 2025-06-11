@@ -33,20 +33,48 @@
     });
 
     hands.onResults(results => {
-      // Draw red glowing circles on hand wrists
-      if (results.multiHandLandmarks) {
-        for (const landmarks of results.multiHandLandmarks) {
-          const wrist = landmarks[0];
-          const x = wrist.x * canvas.width;
-          const y = wrist.y * canvas.height;
-
-          ctx.beginPath();
-          ctx.arc(x, y, 45, 0, 2 * Math.PI); // Bigger circle
-          ctx.fillStyle = 'rgba(255, 0, 0, 0.4)'; // Glowing red
-          ctx.fill();
+        if (results.multiHandLandmarks) {
+          const canvasRect = canvas.getBoundingClientRect();
+      
+          for (const landmarks of results.multiHandLandmarks) {
+            const palm = landmarks[9];
+      
+            // ✅ DRAW with normal canvas coordinates (unflipped)
+            const x = palm.x * canvas.width;
+            const y = palm.y * canvas.height;
+      
+            ctx.beginPath();
+            ctx.arc(x, y, 45, 0, 2 * Math.PI);
+            ctx.fillStyle = 'rgba(255, 0, 0, 0.4)';
+            ctx.fill();
+      
+            // ✅ Convert to screen space for overlap check
+            const flippedX = (1 - palm.x) * canvas.width;
+      
+            const screenX = canvasRect.left + flippedX * (canvasRect.width / canvas.width);
+            const screenY = canvasRect.top + y * (canvasRect.height / canvas.height);
+      
+            // console.log(`Palm (screen): x=${screenX.toFixed(1)}, y=${screenY.toFixed(1)}`);
+      
+            checkOverlapWithButton(screenX, screenY);
+          }
         }
-      }
-    });
+    });  
+    
+    function checkOverlapWithButton(screenX, screenY) {
+        const button = document.querySelector('.buttonTest');
+        const rect = button.getBoundingClientRect();
+      
+        const isOverlapping =
+          screenX >= rect.left &&
+          screenX <= rect.right &&
+          screenY >= rect.top &&
+          screenY <= rect.bottom;
+      
+        if (isOverlapping) {
+          console.log('overlap!');
+        }
+    }      
 
     async function render() {
       // Draw silhouette
