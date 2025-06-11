@@ -48,17 +48,27 @@ html, body {
     justify-content: space-between;
   }
 
+.hoverButton {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 37px;
+    border: none;
+    border-radius: 8px;
+    background-color: transparent;
+}
+
   .hoverButton[data-id="1"] {
-    background-color: red;
-    width: 30%;
+    background-image: url('./IMG/Dutch.png');
+    width: 20%;
   }
-
+  
   .hoverButton[data-id="2"] {
-    background-color: green;
-    width: 30%;
+    background-image: url('./IMG/English.png');
+    width: 20%;
   }
-
+  
   .hoverButton[data-id="3"] {
-    background-color: purple;
-    width: 30%;
+    background-image: url('./IMG/Arabic.png');
+    width: 20%;
   }
