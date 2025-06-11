@@ -69,7 +69,7 @@ async function start() {
           // Draw animated arc
           ctx.beginPath();
           ctx.arc(x, y, radius + 4, startAngle, endAngle, false);
-          ctx.strokeStyle = 'rgba(255, 0, 0, 1)';
+          ctx.strokeStyle = 'rgba(252, 168, 140, 1)';
           ctx.lineWidth = 4;
           ctx.stroke();
 
@@ -83,7 +83,7 @@ async function start() {
         // Always draw base red circle
         ctx.beginPath();
         ctx.arc(x, y, radius, 0, 2 * Math.PI);
-        ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
+        ctx.fillStyle = 'rgba(252, 168, 140, 0.2)';
         ctx.fill();
       }
 
