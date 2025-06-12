@@ -75,7 +75,7 @@ async function start() {
 
           if (progress >= 1 && !selectionMade) {
             selectionMade = true;
-            const label = overlappingButton.textContent || overlappingButton.dataset.id;
+            const label = overlappingButton.dataset.id || overlappingButton.textContent;
             onButtonSelected(label);
           }
         }

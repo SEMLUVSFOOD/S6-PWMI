@@ -94,3 +94,30 @@ html, body {
     background-color: #FF804D;
     border-radius: 8px;
   }
+
+
+  .items {
+    width: 375px;
+    height: 530px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .items button {
+    background-color: #E0E0E0;
+    border-radius: 100px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .itemContent {
+    width: 275px;
+    height: 380px;
+    background-color: #A18DB2;
+    opacity: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
