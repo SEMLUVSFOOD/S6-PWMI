@@ -27,6 +27,7 @@ html, body {
     overflow: hidden;
     background-color: #A18DB2;
     z-index: 0;
+    scale: 1.2;
   }
 
   .screenElement canvas {
@@ -129,3 +130,10 @@ html, body {
     justify-content: center;
     align-items: center;
   }
+
+  @media (max-width: 768px) {
+    .screenElement {
+        scale: 1;
+    }
+  }
+  
