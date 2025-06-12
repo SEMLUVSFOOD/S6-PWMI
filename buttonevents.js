@@ -4,7 +4,8 @@ let currentSlide = -1;
 const contentArray = [
   "poster here",
   "calendar here",
-  "flyer here"
+  "flyer here",
+  "<img src='./IMG/Arabic.png'>"
 ];
 
 export function onButtonSelected(label) {
@@ -61,6 +62,6 @@ function handleContent(label) {
 
   const contentElement = document.querySelector('.itemContent');
   if (contentElement) {
-    contentElement.textContent = contentArray[currentSlide];
+    contentElement.innerHTML = contentArray[currentSlide];
   }
 }
