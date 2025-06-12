@@ -25,6 +25,8 @@ html, body {
     height: 555px;
     border: 5px solid black;
     overflow: hidden;
+    background-color: #A18DB2;
+    z-index: 0;
   }
 
   .screenElement canvas {
@@ -37,6 +39,7 @@ html, body {
     height: 100%;    
     z-index: -10;
     gap: 10px;
+    z-index: 1;
   }
 
   .languageSelectors {
@@ -46,6 +49,7 @@ html, body {
     display: flex;
     align-items: end;
     justify-content: space-between;
+    z-index: 2;
   }
 
 .hoverButton {
@@ -56,6 +60,7 @@ html, body {
     border: none;
     border-radius: 8px;
     background-color: transparent;
+    z-index: 2;
 }
 
   .hoverButton[data-id="1"] {
@@ -81,6 +86,7 @@ html, body {
     display: none;
     align-items: start;
     justify-content: center;
+    z-index: 2;
   }
 
   .popUpNotificationText {
@@ -103,6 +109,8 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    z-index: 2;
+
   }
 
   .items button {
@@ -115,8 +123,8 @@ html, body {
   .itemContent {
     width: 275px;
     height: 380px;
-    background-color: #A18DB2;
-    opacity: 70%;
+    background-color: rgba(134, 136, 185, 0.75);
+    border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;

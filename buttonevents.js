@@ -1,11 +1,9 @@
 // 🔄 Keep track of current content
-let currentSlide = 0;
+let currentSlide = -1;
 
 const contentArray = [
   "poster here",
   "calendar here",
-  "painting here",
-  "brochure here",
   "flyer here"
 ];
 
