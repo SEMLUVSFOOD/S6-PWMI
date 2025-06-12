@@ -83,7 +83,7 @@ async function start() {
         // Always draw base red circle
         ctx.beginPath();
         ctx.arc(x, y, radius, 0, 2 * Math.PI);
-        ctx.fillStyle = 'rgba(252, 168, 140, 0.2)';
+        ctx.fillStyle = 'rgba(252, 168, 140, 0.5)';
         ctx.fill();
       }
 
