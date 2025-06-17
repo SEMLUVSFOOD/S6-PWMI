@@ -202,7 +202,7 @@ function redirectToMainPage() {
   
   // Redirect after showing message
   setTimeout(() => {
-    window.location.href = '../index.html';
+    window.location.href = '/S6-PWMI/index.html';
   }, 2000);
 }
 
