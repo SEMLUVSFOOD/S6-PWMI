@@ -130,10 +130,30 @@ html, body {
     justify-content: center;
     align-items: center;
   }
+/* 
+UNUSED DUE TO BEING CHANGED
+  .explainer {
+    width: 396px;
+    height: 555px;
+    position: absolute;
+    display: flex;
+    align-items: start;
+    justify-content: right;
+    z-index: 2;
+  }
+
+  .explainer img {
+    width: 40%;
+    height: 88px;
+    object-fit: cover;
+    object-position: 0% 16%;
+    } */
 
   @media (max-width: 768px) {
     .screenElement {
         scale: 1;
     }
   }
+  
+
   
