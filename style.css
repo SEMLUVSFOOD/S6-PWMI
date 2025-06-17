@@ -130,8 +130,13 @@ html, body {
     justify-content: center;
     align-items: center;
   }
-/* 
-UNUSED DUE TO BEING CHANGED
+
+  .itemContent img{
+    width: 100%;
+    opacity: 75%;
+    border-radius: 8px;
+  }
+
   .explainer {
     width: 396px;
     height: 555px;
@@ -147,7 +152,7 @@ UNUSED DUE TO BEING CHANGED
     height: 88px;
     object-fit: cover;
     object-position: 0% 16%;
-    } */
+    }
 
   @media (max-width: 768px) {
     .screenElement {

@@ -2,10 +2,8 @@
 let currentSlide = -1;
 
 const contentArray = [
-  "poster here",
-  "calendar here",
-  "flyer here",
-  "<img src='./IMG/Arabic.png'>"
+  "<img src='./IMG/Trial4.png'>",
+  "<img src='./IMG/Trial3.png'>"
 ];
 
 export function onButtonSelected(label) {
