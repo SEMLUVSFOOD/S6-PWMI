@@ -169,13 +169,12 @@ async function start() {
       // Create silhouette mask
       const mask = bodyPix.toMask(
         segmentation,
-        { r: 255, g: 255, b: 255, a: 120 }, // White silhouette with transparency
-        { r: 0, g: 0, b: 0, a: 0 } // Transparent background
+        { r: 0, g: 0, b: 0, a: 255 }, // Fully opaque black silhouette
+        { r: 0, g: 0, b: 0, a: 0 }
       );
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Apply the silhouette mask
+      // Draw only the black mask, no outline or shadow
       ctx.putImageData(mask, 0, 0);
       
       // Send frame to hand detection

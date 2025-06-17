@@ -367,9 +367,8 @@ body {
 }
 
 #canvas {
-    opacity: 0.85;
+    opacity: 1;
     z-index: 2;
-    mix-blend-mode: screen;
     position: fixed;
     top: 0;
     left: 0;
