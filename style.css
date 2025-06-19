@@ -158,6 +158,10 @@ html, body {
     .screenElement {
         scale: 1;
     }
+    body {
+        margin-top: 20px;
+        align-items: start;
+    }
   }
   
 
