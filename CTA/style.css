@@ -35,24 +35,27 @@ body {
     padding: 20px 40px;
     background: rgba(157, 130, 172, 0.4);
     backdrop-filter: blur(10px);
-    border-bottom: 2px solid rgba(255, 127, 74, 0.3);
+    border-bottom: 0 !important;
 }
 
 .logo-section {
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 15px;
+    width: 100%;
 }
 
 /* PWMI Logo Styles */
 .pwmi-logo {
+    margin-right: 0 !important;
     position: relative;
     width: 120px;
     height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 20px;
 }
 
 .logo-circle {
@@ -812,15 +815,15 @@ body {
 }
 
 .hand-icon-large {
-    animation: hand-wave 2s ease-in-out infinite;
-    margin-bottom: 20px;
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
-    color: #9D82AC;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 16px auto;
 }
 
-.hand-icon-large .icon-hand {
-    width: 80px;
-    height: 80px;
+.hand-icon-large img {
+    animation: hand-wave 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
 }
 
 @keyframes hand-wave {
