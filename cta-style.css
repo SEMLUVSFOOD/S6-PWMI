@@ -1,0 +1,157 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    background: #fff; /* White background for the page */
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.screen-container {
+    width: 400px; /* Restoring fixed portrait width */
+    height: 711px; /* Restoring fixed portrait height */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: hidden;
+    background: #503c6c; /* Restoring purple background for the display */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+video { display: none; }
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.header-text {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    text-align: center;
+    color: white; /* Changed back to white */
+    width: 90%;
+}
+
+.title {
+    font-family: 'Anton', sans-serif;
+    font-size: 3.5em; /* Changed from vw to em for fixed size */
+    margin: 0;
+    text-transform: uppercase;
+    color: #fff; /* Changed back to white */
+    text-shadow:  /* Restoring shadow for readability on purple */
+        -2px -2px 0 #000,  
+         2px -2px 0 #000,
+        -2px  2px 0 #000,
+         2px  2px 0 #000,
+         4px 4px 8px rgba(0,0,0,0.5);
+    transition: transform 0.2s ease-out;
+}
+
+.title.activated {
+    transform: scale(1.1);
+    color: #ffae42; /* Change color on activation */
+}
+
+.subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2em;
+    font-weight: 700;
+    margin-top: 10px;
+    opacity: 0.9;
+    color: #fff;
+    height: 1.5em; /* Set fixed height for animation */
+    position: relative; /* Create positioning context */
+}
+
+.subtitle span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    animation: fade-cycle 8s infinite;
+}
+
+.subtitle span:nth-child(2) {
+    animation-delay: 4s;
+}
+
+@keyframes fade-cycle {
+    0% { opacity: 0; }
+    12.5% { opacity: 1; } /* Fade in for 1s */
+    50% { opacity: 1; } /* Stay for 3s */
+    62.5% { opacity: 0; } /* Fade out for 1s */
+    100% { opacity: 0; }
+}
+
+footer {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    z-index: 2;
+}
+
+.footer-logo {
+    width: 90px;
+    height: auto;
+    opacity: 0.8;
+}
+
+body.transitioning {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        scale: 1;
+        width: 350px;
+        height: 500px;
+    }
+    
+    body {
+        margin-top: 20px;
+        align-items: start;
+    }
+    
+    header h1 {
+        font-size: 2em;
+    }
+    
+    .content-box h3 {
+        font-size: 2em;
+    }
+}
+
+/* Hand tracking visual feedback */
+.handDetected {
+    animation: handGlow 0.5s ease-in-out;
+}
+
+@keyframes handGlow {
+    0% {
+        box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+} 

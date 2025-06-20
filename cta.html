@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spot Yourself!</title>
+    <link rel="stylesheet" href="cta-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- TensorFlow and BodyPix -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.2.0"></script>
+
+    <!-- MediaPipe Hands -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+</head>
+<body>
+    <div class="screen-container">
+        <div class="header-text">
+            <h1 class="title">Spot yourself?</h1>
+            <p class="subtitle">
+                <span>Hold your hand still to begin</span>
+                <span>Houd je hand stil om te beginnen</span>
+            </p>
+        </div>
+
+        <video id="video" autoplay playsinline></video>
+        <canvas id="canvas"></canvas>
+
+        <footer>
+            <img class="footer-logo" src="./IMG/imagesf 1.png" alt="PWMI Logo">
+        </footer>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const titleElement = document.querySelector('.title');
+
+        let latestSegmentation = null;
+        let latestHandResults = null;
+        let selectionMade = false;
+        let hoverStart = null;
+
+        async function setupCamera() {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 } });
+          video.srcObject = stream;
+          return new Promise(resolve => {
+            video.onloadedmetadata = () => resolve();
+          });
+        }
+
+        function redirectToMain() {
+            if (!selectionMade) {
+                selectionMade = true;
+                document.body.classList.add('transitioning');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            }
+        }
+
+        async function start() {
+          await setupCamera();
+          video.play();
+
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+
+          const bodyPixNet = await bodyPix.load({
+            architecture: 'MobileNetV1', outputStride: 16, multiplier: 0.75, quantBytes: 2
+          });
+
+          const hands = new Hands({
+            locateFile: file => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+          });
+
+          hands.setOptions({
+            maxNumHands: 2,
+            modelComplexity: 1,
+            minDetectionConfidence: 0.7,
+            minTrackingConfidence: 0.7
+          });
+
+          hands.onResults(results => {
+            latestHandResults = results;
+          });
+
+          function renderLoop() {
+            if (selectionMade) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the silhouette if available
+            if (latestSegmentation) {
+                const mask = bodyPix.toMask(latestSegmentation, { r: 0, g: 0, b: 0, a: 255 }, { r: 0, g: 0, b: 0, a: 0 });
+                ctx.putImageData(mask, 0, 0);
+            }
+
+            if (latestHandResults && latestHandResults.multiHandLandmarks && latestHandResults.multiHandLandmarks.length > 0) {
+                const landmarks = latestHandResults.multiHandLandmarks[0];
+
+                if (hoverStart === null) hoverStart = Date.now();
+                const elapsedTime = Date.now() - hoverStart;
+                const progress = Math.min(elapsedTime / 2000, 1);
+
+                const palm = landmarks[9];
+                const canvasX = (1 - palm.x) * canvas.width;
+                const canvasY = palm.y * canvas.height;
+                const radius = 50;
+
+                ctx.save();
+                // Draw background circle
+                ctx.beginPath();
+                ctx.arc(canvasX, canvasY, radius, 0, 2 * Math.PI, false);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.lineWidth = 10;
+                ctx.stroke();
+
+                // Draw progress arc
+                const startAngle = -Math.PI / 2;
+                const endAngle = startAngle + 2 * Math.PI * progress;
+                ctx.beginPath();
+                ctx.arc(canvasX, canvasY, radius, startAngle, endAngle, false);
+                ctx.strokeStyle = '#ffae42';
+                ctx.lineWidth = 10;
+                ctx.stroke();
+
+                // Un-mirror and draw percentage text
+                ctx.save();
+                ctx.translate(canvasX, canvasY);
+                ctx.scale(-1, 1);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 20px Montserrat';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(`${Math.round(progress * 100)}%`, 0, 0);
+                ctx.restore();
+
+                if (progress >= 1) redirectToMain();
+                
+                ctx.restore();
+            } else {
+                hoverStart = null; // Reset timer if no hand is detected
+            }
+            
+            requestAnimationFrame(renderLoop);
+          }
+
+          async function predictionLoop() {
+              while(!selectionMade) {
+                latestSegmentation = await bodyPixNet.segmentPerson(video, {
+                    internalResolution: 'medium', segmentationThreshold: 0.7
+                });
+                await hands.send({ image: video });
+              }
+          }
+
+          predictionLoop();
+          renderLoop();
+        }
+
+        start();
+    </script>
+</body>
+</html> 
