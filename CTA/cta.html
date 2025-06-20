@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Woensel Zuid Ontdekking - PWMI Digital Screen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tenorite:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- TensorFlow and BodyPix -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.2.0"></script>
+    <!-- MediaPipe Hands -->
+        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+    <!-- CTA Hand Detection -->
+        <script src="./cta-hand-detection.js" defer></script>
+    </head>
+<body>
+    <div class="screenElement">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="logo-section">
+                <div class="pwmi-logo">
+                    <div class="logo-circle circle-1"></div>
+                    <div class="logo-circle circle-2"></div>
+                    <div class="logo-circle circle-3"></div>
+                    <div class="logo-circle circle-4"></div>
+                    <div class="logo-circle circle-5"></div>
+                    <div class="logo-text">PWMI</div>
+                </div>
+                <div class="tournament-title">Woensel Zuid Voetbaltoernooi</div>
+            </div>
+        </div>
+
+        <!-- Main Content - Vertical Layout -->
+        <div class="poster-content">
+            <!-- Top Section with Logo Integration -->
+            <div class="top-section">
+                <div class="decorative-elements">
+                    <div class="floating-shapes">
+                        <div class="shape shape-1"></div>
+                        <div class="shape shape-2"></div>
+                        <div class="shape shape-3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Title Section -->
+            <img src="../IMG/Asset 26 1.png" alt="Event Title" style="max-width: 350px; width: 100%; height: auto; margin: 0 auto 18px auto; display: block;" />
+            <div class="main-title-section">
+                <div class="title-container">
+                    <h1 class="main-title">VOETBAL</h1>
+                    <h2 class="subtitle">TOERNOOI 2024</h2>
+                    <div class="tournament-date">15-16 JUNI • GRATIS DEELNAME</div>
+                    <div class="title-accent"></div>
+                </div>
+            </div>
+
+            <!-- Interactive Call to Action -->
+            <div class="interaction-section">
+                <div class="hand-icon-large">
+                    <img src="../IMG/cursor-grab-icon-502x512-ay036dhd.png" alt="Hand hover icon" style="width: 64px; height: 64px; margin-bottom: 12px;" />
+                </div>
+            </div>
+
+            <!-- Feature Cards -->
+            <!-- Removed the feature-section (cards) for a cleaner look -->
+
+            <!-- Bottom Section -->
+            <div class="bottom-section">
+                <div class="info-text">
+                    <p>Gratis deelname • Alle leeftijden welkom • Sportpark Woensel Zuid</p>
+                </div>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <div class="qr-pattern">
+                            <div class="qr-square"></div>
+                            <div class="qr-square"></div>
+                            <div class="qr-square"></div>
+                            <div class="qr-square"></div>
+                            <div class="qr-square"></div>
+                            <div class="qr-square"></div>
+                            <div class="qr-square"></div>
+                            <div class="qr-square"></div>
+                            <div class="qr-square"></div>
+                        </div>
+                    </div>
+                    <p class="qr-text">Aanmelden</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Language Selection Overlay -->
+        <div class="language-overlay" id="languageOverlay">
+            <div class="language-selection">
+                <h2 class="language-title">Kies je taal / Choose your language</h2>
+                <div class="language-buttons">
+                    <button class="language-button hoverButton" data-id="nl" data-lang="dutch">
+                        <img src="../IMG/Dutch.png" alt="Nederlands" class="flag-icon">
+                        <span>Nederlands</span>
+                    </button>
+                    <button class="language-button hoverButton" data-id="en" data-lang="english">
+                        <img src="../IMG/English.png" alt="English" class="flag-icon">
+                        <span>English</span>
+                    </button>
+                    <button class="language-button hoverButton" data-id="ar" data-lang="arabic">
+                        <img src="../IMG/Arabic.png" alt="العربية" class="flag-icon">
+                        <span>العربية</span>
+                    </button>
+                </div>
+                <p class="interaction-instruction">Houd je hand boven een taal om te selecteren<br>Hold your hand over a language to select</p>
+            </div>
+        </div>
+
+        <!-- Video and Canvas for hand tracking -->
+        <video id="video" autoplay playsinline></video>
+        <canvas id="canvas"></canvas>
+    </div>
+</body>
+</html>
