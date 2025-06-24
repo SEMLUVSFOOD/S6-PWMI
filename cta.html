@@ -43,6 +43,8 @@
         let latestHandResults = null;
         let selectionMade = false;
         let hoverStart = null;
+        let flippedCanvas = null;
+        let flippedCtx = null;
 
         async function setupCamera() {
           const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 } });
@@ -68,6 +70,12 @@
 
           canvas.width = video.videoWidth;
           canvas.height = video.videoHeight;
+
+          // Create flipped canvas for BodyPix processing
+          flippedCanvas = document.createElement('canvas');
+          flippedCanvas.width = video.videoWidth;
+          flippedCanvas.height = video.videoHeight;
+          flippedCtx = flippedCanvas.getContext('2d');
 
           const bodyPixNet = await bodyPix.load({
             architecture: 'MobileNetV1', outputStride: 16, multiplier: 0.75, quantBytes: 2
@@ -131,7 +139,6 @@
                 // Un-mirror and draw percentage text
                 ctx.save();
                 ctx.translate(canvasX, canvasY);
-                ctx.scale(-1, 1);
                 ctx.fillStyle = 'white';
                 ctx.font = 'bold 20px Montserrat';
                 ctx.textAlign = 'center';
@@ -151,7 +158,14 @@
 
           async function predictionLoop() {
               while(!selectionMade) {
-                latestSegmentation = await bodyPixNet.segmentPerson(video, {
+                // Draw flipped video to the flipped canvas
+                flippedCtx.save();
+                flippedCtx.scale(-1, 1);
+                flippedCtx.translate(-flippedCanvas.width, 0);
+                flippedCtx.drawImage(video, 0, 0);
+                flippedCtx.restore();
+                
+                latestSegmentation = await bodyPixNet.segmentPerson(flippedCanvas, {
                     internalResolution: 'medium', segmentationThreshold: 0.7
                 });
                 await hands.send({ image: video });
