@@ -112,7 +112,7 @@
 
                 if (hoverStart === null) hoverStart = Date.now();
                 const elapsedTime = Date.now() - hoverStart;
-                const progress = Math.min(elapsedTime / 2000, 1);
+                const progress = Math.min(elapsedTime / 4000, 1);
 
                 const palm = landmarks[9];
                 const canvasX = (1 - palm.x) * canvas.width;

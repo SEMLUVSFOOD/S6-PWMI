@@ -158,7 +158,7 @@ async function start() {
   
       lastFrameData = frame;
   
-      if (Date.now() - lastMotionTime > 5000) {
+      if (Date.now() - lastMotionTime > 2000) {
         window.location.href = 'cta.html';
       }
   
